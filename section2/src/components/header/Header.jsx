@@ -1,5 +1,5 @@
-import Button from "./button/Button";
-import Button2 from "./button/Button2";
+import Button from "../button/Button";
+import Button2 from "../button/Button2";
 
 // Header Compoent
 const Header = () => {
