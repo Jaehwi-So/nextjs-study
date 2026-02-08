@@ -1,33 +1,16 @@
 import Button from "../button/Button";
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 
 // Body Compoent
 const Body = () => {
-
-  // # 문제점 : 입력이 늘어날수록 State와 Callback을 계속 작성해주어야 함
-  
-  // const [name, setName] = useState("");  //Name State
-  // const [gender, setGender] = useState("MALE");  //Gender State
-  // const [text, setText] = useState("텍스트를 입력해주세요");  //Text State
-
-  // console.log(name) //State가 Change될 때 마다 리랜더링되는 것 확인 가능
-
-  // const onChangeName = (e) => {
-  //   setName(e.target.value) //input태그의 사용자 입력을 State를 이용하여 관리 가능(없으면 입력해도 반응 없음)
-  // }
-  // const onChangeGender = (e) => {
-  //   setGender(e.target.value) 
-  // }
-  // const onChangeText = (e) => {
-  //   setText(e.target.value) 
-  // }
-  
 
   const [state, setState] = useState({
     name : "",
     gender: "MALE",
     text: "텍스트를 입력해주세요"
   })
+
+  const nameRef = useRef();
 
   const onChange = (e) => {
     setState({
@@ -37,33 +20,18 @@ const Body = () => {
   }
 
   const onSubmit = () => {
+    if(state.name.length <= 0){
+      nameRef.current.focus();
+      return;
+    }
     alert(`${state.name}님 회원가입이 완료되었습니다`); // 템플릿 리터럴 : ` ${} `
   }
-
-
-  // const onChangeName = (e) => {
-  //   setState({
-  //     ...state,
-  //     name: e.target.value
-  //   })
-  // }
-  // const onChangeGender = (e) => {
-  //   setState({
-  //     ...state,
-  //     gender: e.target.value
-  //   })
-  // }
-  // const onChangeText = (e) => {
-  //   setState({
-  //     ...state,
-  //     text: e.target.value
-  //   })
-  // }
   
   return (
     <div className="body">
       <h1>Body</h1>
       <input 
+        ref={nameRef}
         name={"name"}
         value={state.name} 
         onChange={onChange}></input>
