@@ -1,0 +1,18 @@
+import './App.css'
+import Header from './components/Header'
+import Body from './components/Body'
+import Footer from './components/Footer'
+
+
+// App Compoent
+function App() {
+  return (
+    <>
+      <Header/> {/* 자식 컴포넌트 */}
+      <Body/> {/* 자식 컴포넌트 */}
+      <Footer/> {/* 자식 컴포넌트 */}
+    </>
+  )
+}
+
+export default App
