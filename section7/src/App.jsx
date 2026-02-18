@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import './App.css'
-import Header from './components/Header'
-import TodoEditor from './components/TodoEditor'
-import TodoList from './components/TodoList'
+import Header from './components/header/Header'
+import TodoEditor from './components/todoEditor/TodoEditor'
+import TodoList from './components/todoList/TodoList'
 import { useRef } from 'react'
+import { useReducer } from 'react'
 
 const mockData = [
   {
@@ -24,56 +25,73 @@ const mockData = [
     content : "할일3",
     createdDate : new Date().getTime()
   }
-  
 ]
-function App() {
 
-  const [todos, setTodos] = useState(mockData);
-  const idRef = useRef(3);
-
-  const onCreate = (content) => {
-    const newTodo = {
-      id : idRef.current++,
-      isDone : false,
-      content,
-      createdDate : new Date().getTime()
+function reducer(state, action){
+  switch(action.type){
+    case "CREATE":{
+      return [...state, action.data];
     }
-
-    setTodos(
-      [...todos, newTodo]
-    )
-  }
-
-  const onUpdate = (targetId) => {
-    setTodos(
-      todos.map((todo) => 
-        todo.id === targetId
+    case "UPDATE":{
+      return state.map((todo) => 
+        todo.id === action.data
           ? {...todo, isDone : !todo.isDone}
           : todo
       )
-    )
-    // setTodos(
-    //   todos.map((todo) => {
-    //     if(todo.id === targetId){
-    //       return{
-    //         ...todo,
-    //         isDone : !todo.isDone
-    //       }
-    //     }
-    //     else{
-    //       return todo
-    //     }
-    //   })
-    // )
-  }
-
-  const onDelete = (targetId) => {
-    setTodos(
-      todos.filter((todo) => 
-        todo.id !== targetId
+    }
+    case "DELETE":{
+      return state.filter((todo) => 
+        todo.id !== action.data
       )
-    )
+    }
   }
+}
+
+function App() {
+
+  // const [todos, setTodos] = useState(mockData);
+  const [todos, dispatch] = useReducer(reducer, mockData);
+  const idRef = useRef(3);
+
+  const onCreate = useCallback((content) => {
+
+    dispatch({
+      type: "CREATE",
+      data: {
+        id : idRef.current++,
+        isDone : false,
+        content,
+        createdDate : new Date().getTime()
+      }
+    })
+
+    // setTodos(
+    //   [...todos, newTodo]
+    // )
+  }, []); //useCallback(메서드, 재생성 참조값 조건) : 함수 재생성 방지
+
+  const onUpdate = useCallback((targetId) => {
+
+    dispatch({
+      type: "UPDATE",
+      data: targetId
+    })
+
+    // setTodos(
+    //   todos.map((todo) => 
+    //     todo.id === targetId
+    //       ? {...todo, isDone : !todo.isDone}
+    //       : todo
+    //   )
+    // )
+  }, []); //useCallback(메서드, 재생성 참조값 조건) : 함수 재생성 방지
+
+  const onDelete = useCallback((targetId) => {
+    dispatch({
+      type: "DELETE",
+      data: targetId
+    })
+  }, []) //useCallback(메서드, 재생성 참조값 조건) : 함수 재생성 방지
 
   return (
     <div className="App">

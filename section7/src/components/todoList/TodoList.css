@@ -1,5 +1,10 @@
 .TodoList{ 
-  color:cadetblue;
+  color:black;
+  margin-bottom:0px;
+}
+
+.TodoList h3 { 
+  color:darkcyan;
   margin-bottom:0px;
 }
 
