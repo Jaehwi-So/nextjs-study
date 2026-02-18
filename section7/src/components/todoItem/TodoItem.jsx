@@ -1,7 +1,10 @@
+import { TodoDispatchContext } from '../../../todoContext';
 import './TodoItem.css'
-import { memo } from 'react'
+import { memo, useContext} from 'react'
 
-function TodoItem({id, isDone, createdDate, content, onUpdate, onDelete}){
+function TodoItem({id, isDone, createdDate, content}){
+
+    const { onUpdate, onDelete } = useContext(TodoDispatchContext);
 
     const onChangeCheckbox = () => {
         onUpdate(id);
@@ -20,4 +23,4 @@ function TodoItem({id, isDone, createdDate, content, onUpdate, onDelete}){
     )
 }
 
-export default memo(TodoItem); // 메서드(onUpdate()와 onDelete())의 참조값이 바뀌기 때문에 Props가 바뀌는 것으로 인지함
+export default memo(TodoItem); // 메서드(onUpdate()와 onDelete())의 참조값이 바뀌기 때문에 Props가 바뀌는 것으로 인지함 > 함수 재생성 방지(useCallback()) 필요

@@ -1,8 +1,12 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useContext } from 'react'
 import TodoItem from '../todoItem/TodoItem'
 import './TodoList.css'
+import { TodoStateContext, TodoDispatchContext } from '../../../todoContext';
 
-export default function TodoList({ todos, onUpdate, onDelete }){
+export default function TodoList(){
+
+    const { onUpdate, onDelete } = useContext(TodoDispatchContext);
+    const { todos } = useContext(TodoStateContext);
 
     const [search, setSearch] = useState("");
 
@@ -45,7 +49,6 @@ export default function TodoList({ todos, onUpdate, onDelete }){
     // const {totalCount, doneCount, notDoneCount} = getAnalyzedTodoData();
     const {totalCount, doneCount, notDoneCount} = useMemo(getAnalyzedTodoData, [todos]); //useMemo()를 이용하여 todos의 변경시에만 실행되도록 설정
 
-
     return(
         <div className="TodoList">
             <h3>TODOS</h3>
@@ -63,7 +66,7 @@ export default function TodoList({ todos, onUpdate, onDelete }){
                 // React는 내부적으로 리스트의 아이템을 식별하기 위해 key를 지정해야 한다. */
                 }
                 {filterTodos().map((todo) => (
-                    <TodoItem key={todo.id} {...todo} onUpdate={onUpdate} onDelete={onDelete}></TodoItem>  
+                    <TodoItem key={todo.id} {...todo}></TodoItem>  
                 ))} 
             </div>
         </div>

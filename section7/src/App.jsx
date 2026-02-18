@@ -1,10 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useReducer, useMemo } from 'react'
 import './App.css'
 import Header from './components/header/Header'
 import TodoEditor from './components/todoEditor/TodoEditor'
 import TodoList from './components/todoList/TodoList'
-import { useRef } from 'react'
-import { useReducer } from 'react'
+import { TodoStateContext, TodoDispatchContext } from '../todoContext'
 
 const mockData = [
   {
@@ -93,11 +92,23 @@ function App() {
     })
   }, []) //useCallback(메서드, 재생성 참조값 조건) : 함수 재생성 방지
 
+
+
+  const memoizedDispatches = useMemo(() => {
+      return{
+          onCreate, onUpdate, onDelete
+      }
+  }, [])
+
   return (
     <div className="App">
       <Header/>
-      <TodoEditor onCreate={onCreate}/>
-      <TodoList todos={todos} onUpdate={onUpdate} onDelete={onDelete}/>
+      <TodoStateContext.Provider value={{todos}}>  {/* 하위 컴포넌트들이 Context의 공급을 받을 수 있음 */}
+        <TodoDispatchContext.Provider value={memoizedDispatches}>
+          <TodoEditor/>
+          <TodoList/>
+        </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </div>
   )
 }
